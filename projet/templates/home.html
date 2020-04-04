@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for compte in comptes.items %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + compte.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('user_comptes', username=compte.createur.username) }}">Crée par {{ compte.createur.username }}</a>
+              <small class="text-muted">Le : {{ compte.date_posted.strftime('%d-%m-%y') }}</small>
+            </div>
+            <h2><a class="article-title" href="{{ url_for('compte', compte_id=compte.id) }}">Client : {{ compte.nom }} {{ compte.prenom }}</a></h2>
+            <p class="article-content">Type du compte : {{ compte.type_compte }}</p>
+            <p class="article-content">Solde actuel dans le compte : {{ compte.solde }}</p>
+
+          </div>
+        </article>
+    {% endfor %}
+    {% for page_num in comptes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if comptes.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+{% endblock content %}
